@@ -1,14 +1,9 @@
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
-from sklearn.linear_model import SGDClassifier,LogisticRegression
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
+from sklearn.linear_model import SGDClassifier, LogisticRegression
+from sklearn.metrics import classification_report, accuracy_score
+from sklearn.model_selection import GridSearchCV, cross_val_score
 from sklearn.neural_network import MLPClassifier
-import numpy as np
 
 
 def algo_name(name, lendash=50):
@@ -71,7 +66,7 @@ def svc(X_train, y_train, X_test, y_test, searchbestparam=False):
     return raportdict, raport
 
 
-def neuralNetwork(X_train, y_train, X_test, y_test ):
+def neuralNetwork(X_train, y_train, X_test, y_test):
     algo_name("Multilayer Perceptron classifier")
     clf = MLPClassifier(hidden_layer_sizes=(12, 24, 6), random_state=1, activation='logistic', max_iter=3500).fit(
         X_train, y_train)
@@ -79,9 +74,10 @@ def neuralNetwork(X_train, y_train, X_test, y_test ):
     raportdict, raport = Stats(pred_clf, y_test)
     return raportdict, raport
 
-def logisticRegression(X_train, y_train, X_test, y_test ):
+
+def logisticRegression(X_train, y_train, X_test, y_test):
     algo_name("Logistic regression")
-    clf = LogisticRegression( C=1.0,).fit(X_train,y_train)
+    clf = LogisticRegression(C=1.0, ).fit(X_train, y_train)
     pred_clf = clf.predict(X_test)
     raportdict, raport = Stats(pred_clf, y_test)
     return raportdict, raport

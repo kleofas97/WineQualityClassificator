@@ -1,13 +1,8 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
-from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
 import sys
 import algo
 
@@ -92,8 +87,6 @@ Results = results(Results, "RandForst", randFrostRsltDict['bad']['f1-score'], ra
 LogRegRsltDict, LogRegRslt = algo.logisticRegression(X_train, y_train, X_test, y_test)
 Results = results(Results, "Log Reg", LogRegRsltDict['bad']['f1-score'], LogRegRsltDict['good']['f1-score'])
 
-
-
 SGDRsltDict, SGDRslt = algo.sgd(X_train, y_train, X_test, y_test)
 Results = results(Results, "SGD", SGDRsltDict['bad']['f1-score'], SGDRsltDict['good']['f1-score'])
 
@@ -114,4 +107,4 @@ print("Best F1 score for good wines: {} dla algorytmu {}".format(Results['Good w
 print("Best F1 score for bad wines: {} dla algorytmu {}".format(Results['Bad wine F1 score'].max(),
                                                                 Results['Algorithm'][
                                                                     Results['Bad wine F1 score'].idxmax()]))
-algo.RandForst(X_train,y_train,X_test,y_test, crossval=True)
+algo.RandForst(X_train, y_train, X_test, y_test, crossval=True)
