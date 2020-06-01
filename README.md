@@ -5,8 +5,6 @@ Hi this is the first uploaded version of wine quliaty calssifier, based on datas
 
 For running the code please download the repository, install necesarry modules and run the "Winko.py" script.
 
-For now, the algorithm classifies wine's as good or bad. It is a remake of https://www.kaggle.com/vishalyo990/prediction-of-quality-of-wine
-
 In the future, I plan to prepare software to classify it by quality scale and to just binary. 
 
 For nor (may 2020) F1 score for best algirthm (Decision Tree) for predicting "bad wine" is more than 90% and for "good wine" around 65%.
