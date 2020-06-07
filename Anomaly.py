@@ -28,5 +28,14 @@ clf = EllipticEnvelope(random_state=0).fit(X_train, y_train)
 
 pred_clf = clf.predict(X_test)
 score = pred_clf - y_test
+score = score.to_numpy()
+good = 0
+bad = 0
+for i in range(0,len(score)):
+    if score[i] == -2 or score[i] == 0:
+        good += 1
+    else:
+        bad +=1
+print("good results {}, missed {}, accuracy {}%".format(good,bad,100*good/(bad+good)))
 
-print(score)
+#accuracy around 99% - check if possible
