@@ -23,7 +23,7 @@ def Stats(pred_clf, y_test):
 
 
 def RandForst(X_train, y_train, X_test, y_test, crossval=False):
-    clf = RandomForestClassifier(n_estimators=200)
+    clf = RandomForestClassifier(n_estimators=300)
     algo_name("Random forest Classifier")
     clf.fit(X_train, y_train)
     pred_clf = clf.predict(X_test)

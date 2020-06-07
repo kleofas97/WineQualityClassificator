@@ -56,11 +56,11 @@ if (usr_plot == "1"):
 
 # pomysl aby podzielic zbior na dwie czesci - wino dobre i złe.
 
-bins = (2, 6.5, 9)
+bins = (2, 5.5, 9)
 group_names = ['bad', 'good']
 wine['quality'] = pd.cut(wine['quality'], bins=bins, labels=group_names)
-# sns.countplot(wine['quality'])
-# plt.show()
+sns.countplot(wine['quality'])
+plt.show()
 
 label_quality = LabelEncoder()
 # Bad becomes 0 and good becomes 1
