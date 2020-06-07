@@ -100,6 +100,21 @@ Results = results(Results, "SVC", SVCRsltDict['bad']['f1-score'], SVCRsltDict['g
 MLPRsltDict, MLPRslt = algo.neuralNetwork(X_train, y_train, X_test, y_test)
 Results = results(Results, "Neural Network", MLPRsltDict['bad']['f1-score'], MLPRsltDict['good']['f1-score'])
 
+DecTreeRsltDict, DecTreeRslt = algo.DecisionTree(X_train, y_train, X_test, y_test)
+Results = results(Results, "Decision Tree", DecTreeRsltDict['bad']['f1-score'], DecTreeRsltDict['good']['f1-score'])
+
+DecTreeBaggingRsltDict, DecTreeBaggingRslt = algo.DecisionTree(X_train, y_train, X_test, y_test, Bagging=True)
+Results = results(Results, "Decision Tree Bagging", DecTreeBaggingRsltDict['bad']['f1-score'],
+                  DecTreeBaggingRsltDict['good']['f1-score'])
+
+DecTreeAdaBoostRsltDict, DecTreeAdaBoostRslt = algo.DecisionTree(X_train, y_train, X_test, y_test, AdaBoost=True)
+Results = results(Results, "Decision Tree AdaBoost", DecTreeAdaBoostRsltDict['bad']['f1-score'],
+                  DecTreeAdaBoostRsltDict['good']['f1-score'])
+
+kNNRsltDict, kNNRslt = algo.kNN(X_train, y_train, X_test, y_test)
+Results = results(Results, "KNeighbors Classifier", kNNRsltDict['bad']['f1-score'],
+                      kNNRsltDict['good']['f1-score'])
+
 print(Results)
 print("Best F1 score for good wines: {} dla algorytmu {}".format(Results['Good wine F1 score'].max(),
                                                                  Results['Algorithm'][
