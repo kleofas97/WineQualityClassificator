@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.covariance import EllipticEnvelope
 import algo
 from sklearn.metrics import classification_report
+
 # TODO make it work
 # The idea is to find a very low and very high quality wines as anomaly from regular wines.
 # In the seceond part the issue is to find which anomaly is a low-quality and which is high quality.
@@ -19,7 +20,6 @@ sc = StandardScaler()
 X = wine.drop('quality', axis=1)
 wine['quality'] = wine['quality'].map({4: 1, 5: 1, 6: 1, 7: 1, 2: -1, 3: -1, 8: -1, 9: -1})
 y = wine['quality']
-print(y)
 
 X = sc.fit_transform(X)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
@@ -27,15 +27,23 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 clf = EllipticEnvelope(random_state=0).fit(X_train, y_train)
 
 pred_clf = clf.predict(X_test)
-score = pred_clf - y_test
-score = score.to_numpy()
-good = 0
-bad = 0
-for i in range(0,len(score)):
-    if score[i] == -2 or score[i] == 0:
-        good += 1
-    else:
-        bad +=1
-print("good results {}, missed {}, accuracy {}%".format(good,bad,100*good/(bad+good)))
+score = pred_clf * y_test
+print(pred_clf)
+y_test = y_test.to_numpy()
+prednp = pred_clf
+TP, TN, FN, FP = 0, 0, 0, 0
+n_minus = 0
+for i in range(0, len(score)):
+    if y_test[i] == -1 and pred_clf[i] == -1:
+        TP += 1
+    elif y_test[i] == 1 and pred_clf[i] == 1:
+        TN += 1
+    elif y_test[i] == 1 and pred_clf[i] == -1:
+        FP += 1
+    elif y_test[i] == -1 and pred_clf[i] == 1:
+        FN += 1
+P = TP / (TP + FP)
+R = TP / (TP + FN)
+F1 = 2 * P * R / (P + R)
+print("P: {} \n R: {} \n F1: {}".format(P, R, F1))
 
-#accuracy around 99% - check if possible
