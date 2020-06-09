@@ -1,14 +1,14 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from scipy.io import loadmat
-from scipy import stats
-from sklearn.metrics import f1_score
+from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.covariance import EllipticEnvelope
-import algo
 from sklearn.metrics import classification_report
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, accuracy_score
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
 
 # TODO make it work
 # The idea is to find a very low and very high quality wines as anomaly from regular wines.
@@ -18,32 +18,42 @@ from sklearn.metrics import classification_report
 wine = pd.read_csv('winequality-red.csv', sep=';')
 sc = StandardScaler()
 X = wine.drop('quality', axis=1)
-wine['quality'] = wine['quality'].map({4: 1, 5: 1, 6: 1, 7: 1, 2: -1, 3: -1, 8: -1, 9: -1})
+ins = 1
+outs = 0
+wine['quality'] = wine['quality'].map({4: ins, 5: ins, 6: ins, 7: ins, 2: outs, 3: outs, 8: outs, 9: outs})
 y = wine['quality']
+print(y.value_counts())
 
 X = sc.fit_transform(X)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=1)
 
-clf = EllipticEnvelope(random_state=0).fit(X_train, y_train)
+print("train set: \n{}".format(y_train.value_counts()))
+print("test set: \n{}".format(y_test.value_counts()))
 
+clf = KNeighborsClassifier(n_neighbors=3).fit(X_train, y_train)
 pred_clf = clf.predict(X_test)
-score = pred_clf * y_test
-print(pred_clf)
-y_test = y_test.to_numpy()
-prednp = pred_clf
-TP, TN, FN, FP = 0, 0, 0, 0
-n_minus = 0
-for i in range(0, len(score)):
-    if y_test[i] == -1 and pred_clf[i] == -1:
-        TP += 1
-    elif y_test[i] == 1 and pred_clf[i] == 1:
-        TN += 1
-    elif y_test[i] == 1 and pred_clf[i] == -1:
-        FP += 1
-    elif y_test[i] == -1 and pred_clf[i] == 1:
-        FN += 1
-P = TP / (TP + FP)
-R = TP / (TP + FN)
-F1 = 2 * P * R / (P + R)
-print("P: {} \n R: {} \n F1: {}".format(P, R, F1))
+print("accuracy for {} neighbours : {}".format(3, accuracy_score(y_test, pred_clf)))
+print(classification_report(y_test, pred_clf))
+
+clf = SVC()
+param = {
+    'C': [1.1, 1.2, 1.3, 1.4, 1.5, 1.6],
+    'kernel': ['linear', 'rbf', 'poly'],
+    'gamma': [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
+}
+grid_svc = GridSearchCV(clf, param_grid=param, scoring='accuracy', cv=10)
+grid_svc.fit(X_train, y_train)
+clf = SVC(C=grid_svc.best_params_['C'], gamma=grid_svc.best_params_['gamma'],
+          kernel=grid_svc.best_params_['kernel'])
+clf.fit(X_train, y_train)
+pred_clf = clf.predict(X_test)
+print("accuracy for best SVC: {}".format(accuracy_score(y_test, pred_clf)))
+print(classification_report(y_test, pred_clf))
+
+clf = MLPClassifier(hidden_layer_sizes=(12, 12, 6, 2), random_state=1, max_iter=3500).fit(
+    X_train, y_train)
+pred_clf = clf.predict(X_test)
+print("accuracy for NN: {}".format(accuracy_score(y_test, pred_clf)))
+print(classification_report(y_test, pred_clf))
+
 
