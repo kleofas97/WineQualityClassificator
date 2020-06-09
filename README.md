@@ -10,7 +10,7 @@ In the future, I plan to prepare software to classify it by quality scale and no
 For nor (may 2020) F1 score for best algirthm (Random Tree) for predicting "bad wine" is more than 90% and for "good wine" around 65%.
 
 New idea which is being developed is an idea to first detect outliers, such as best and worst wines and then classify them as good and bad.
-
+Test showed that this idea is not worth trying. Not any of the results present satisfactory result. 
 
 
 Feel free to use it.
